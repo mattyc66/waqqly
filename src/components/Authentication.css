@@ -1,0 +1,40 @@
+.Reg-button {
+    text-decoration: none;
+    border-color: white;
+    border-width: 1px;
+    border-style: solid;
+    border-radius: 4px;
+    font-size: 16;
+    padding: 8px 16px;
+    color: white;
+}
+
+.Log-button {
+    margin-right: 32px;
+    text-decoration: none;
+    color: white;
+
+}
+
+.profile-link-button {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    margin-right: 20px;
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
+    margin-right: 20px;
+    background-color: white;
+
+}
+
+.out-button{
+    text-decoration: none;
+    color: white;
+    border-width: 1px;
+    border-style: solid;
+    border-radius: 4px;
+    margin-left: 20px;
+    font-size: 16;
+    padding: 8px 16px;
+    color: white;
+}

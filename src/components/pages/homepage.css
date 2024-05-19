@@ -1,0 +1,98 @@
+.home-container {
+  width: 100%;
+  background-color: #1a1a1a;
+}
+
+.image-banner {
+  width: 100%;
+}
+
+.banner-image {
+  width: 100%;
+  max-height: 450px;
+}
+
+.hero-section {
+  position: relative;
+}
+
+.banner-image {
+  width: 100%;
+}
+
+.hero-content {
+  position: absolute;
+  bottom: 10px; /* Add some space from the bottom */
+  right: 300px; /* Move the content more to the right */
+  background-color: rgba(0, 0, 0, 0.2); /* Semi-transparent background */
+  padding: 20px;
+  color: white;
+}
+
+.hero-content p {
+  font-size: 18px;
+  margin-bottom: 20px;
+}
+
+.start-button {
+  padding: 10px 20px;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.start-button:hover {
+  background-color: #0056b3;
+}
+
+.content-container {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  grid-template-rows: repeat(2, minmax(150px, auto)); /* Adjusted height */
+  gap: 20px; /* Increased gap between sections */
+  padding: 20px;
+}
+
+.section {
+  padding: 20px;
+  background-color: #f9f9f9;
+  border-radius: 8px;
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+}
+
+.top-left, .bottom-left {
+  grid-column: 1;
+  background-color: #333333;
+  color: white;
+  margin-top: 50px;
+  margin-bottom: 50px;
+  
+}
+
+.top-right, .bottom-right {
+  grid-column: 2;
+  background-color: #333333;
+  color: white;
+  margin-top: 50px;
+  margin-bottom: 50px;
+}
+
+.home-image {
+  width: 100%;
+  height: auto;
+}
+
+h2 {
+  font-size: 24px; /* Increased font size */
+  margin-bottom: 10px;
+}
+
+p {
+  font-size: 18px; /* Increased font size */
+  line-height: 1.5; /* Adjusted line spacing */
+}
