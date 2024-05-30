@@ -4,12 +4,16 @@ import { database, storage } from '../firebase';
 import { ref, onValue } from 'firebase/database';
 import profilePlaceholder from '../images/profile-icon.png';
 import { ref as Ref, getDownloadURL } from "firebase/storage";
-import { TileLayer, MapContainer } from 'react-leaflet';
+import { TileLayer, MapContainer, Marker, Popup } from 'react-leaflet';
 import "leaflet/dist/leaflet.css"
+import { fetchCoordinates } from '../geocode';
+import L from 'leaflet';
 
 
 const Main = () => {
     const [walkers, setWalkers] = useState([]);
+    const [walkerLocations, setWalkerLocations] = useState([]);
+    const googleMapsApiKey = 'AIzaSyCOocKwlCnFBdZL7pbcek5tdu3vBIiuYgA';
 
     useEffect(() => { 
         const walkersRef = ref(database, 'users/Walkers');
@@ -20,7 +24,8 @@ const Main = () => {
                 const walkerDetails = Object.entries(walkerData).map(async ([uid, details]) => {
                     const imageRef = Ref(storage, `users/Walkers/${uid}/profile.jpg`);
                     const imageUrl = await getDownloadURL(imageRef).catch(error => console.error('Error getting image URL:', error));
-                    return { uid, ...details, imageUrl };
+                    const coordinates = await fetchCoordinates(details.Postcode, googleMapsApiKey).catch(error => console.error('Error fetching coordinates:', error));
+                    return { uid, ...details, imageUrl, coordinates };
                 });
                 Promise.all(walkerDetails).then(data => setWalkers(data));
             } else {
@@ -32,6 +37,19 @@ const Main = () => {
             unsubscribe();
         };
     }, []);
+
+    useEffect(() => {
+        const locations = walkers.map(walker => walker.coordinates).filter(Boolean);
+        setWalkerLocations(locations);
+    }, [walkers]);
+
+    const defaultIcon = L.icon({
+        iconUrl: require('leaflet/dist/images/marker-icon.png'),
+        iconSize: [25, 41],
+        iconAnchor: [12, 41],
+        popupAnchor: [1, -34],
+        shadowSize: [41, 41],
+    });
 
 
     return (
@@ -56,6 +74,11 @@ const Main = () => {
                         url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
                         attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
                     />
+                        {walkerLocations.map((location, index) => (
+                        <Marker key={index} position={[location.lat, location.lng]} icon={defaultIcon}>
+                            <Popup>{walkers[index].Firstname} {walkers[index].Lastname}</Popup>
+                        </Marker>
+                    ))}
                 </MapContainer>
             </div>
         </div>

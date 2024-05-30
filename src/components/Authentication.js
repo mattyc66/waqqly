@@ -21,7 +21,6 @@ function Authentication() {
                 if (uid) {
                     const imageRefWalkers = Ref(storage, `users/Walkers/${uid}/profile.jpg`);
                     const imageRefOwners = Ref(storage, `users/Owners/${uid}/profile.jpg`);
-
                     Promise.all([
                         getDownloadURL(imageRefWalkers).catch(() => null),
                         getDownloadURL(imageRefOwners).catch(() => null)

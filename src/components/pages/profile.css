@@ -81,3 +81,28 @@
 .apply-button:hover {
     background-color: #0056b3;
 }
+
+.type-button {
+    flex: 1;
+    padding: 10px 20px;
+    margin-left: 10px;
+    margin-right: 10px;
+    border-radius: 8px;
+    border: none;
+    cursor: pointer;
+    max-width: 120px;
+}
+
+.walk{
+    background-color: #007bff;
+    color: #fff;
+}
+
+.own{
+    background-color: #28a745;
+    color: #fff;
+}
+
+.type-button.depressed {
+    opacity: 0.6; /* Reduce opacity to indicate the depressed state */
+}

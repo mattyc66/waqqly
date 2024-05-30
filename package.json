@@ -1,6 +1,5 @@
 {
   "name": "website-stuff",
-  "homepage": "https://main.d41m51z9e77c9.amplifyapp.com/homepage",
   "version": "0.1.0",
   "private": true,
   "dependencies": {

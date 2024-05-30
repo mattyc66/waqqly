@@ -8,7 +8,10 @@ import './profile.css';
 const Profile = () => {
     const [userData, setUserData] = useState(null);
     const [profileImage, setProfileImage] = useState(null);
-    const [userType, setUserType] = useState(null); 
+    const [userType, setUserType] = useState(null);
+    const [postcode, setPostcode] = useState(''); // State for postcode
+    const [isWalker, setIsWalker] = useState(false); // State for walker button
+    const [isOwner, setIsOwner] = useState(false); // State for owner button 
 
     useEffect(() => {
         const uid = localStorage.getItem('userUID');
@@ -19,7 +22,8 @@ const Profile = () => {
             const userData = snapshot.val();
             if (userData) {
                 setUserData(userData);
-                setUserType('Owners'); 
+                setUserType('Owners');
+                setIsOwner(true); 
             }
         }).catch((error) => {
             console.error('Error fetching owner data:', error);
@@ -31,7 +35,8 @@ const Profile = () => {
                 const userData = snapshot.val();
                 if (userData) {
                     setUserData(userData);
-                    setUserType('Walkers'); 
+                    setUserType('Walkers');
+                    setIsWalker(true); 
                 }
             }).catch((error) => {
                 console.error('Error fetching walker data:', error);
@@ -49,19 +54,37 @@ const Profile = () => {
                     console.error('Error fetching profile image:', error);
                 });
         }
-    }, [userType]);
+
+        if (userData && userData.Postcode) {
+            setPostcode(userData.Postcode);
+        }
+
+    }, [userType, userData]);
 
     
     const handleApplyChanges = () => {
         const uid = localStorage.getItem('userUID');
         const userRef = ref(database, `users/${userType}/${uid}`);
-        update(userRef, userData)
+        const updatedUserData = { ...userData, Postcode: postcode };
+        update(userRef, updatedUserData)
             .then(() => {
                 console.log('Profile updated successfully!');
             })
             .catch((error) => {
                 console.error('Error updating profile:', error);
             });
+    };
+
+    const WalkerButtonClick = () => {
+        setUserType('Walkers');
+        setIsWalker(true);
+        setIsOwner(false);
+    };
+
+    const OwnerButtonClick = () => {
+        setUserType('Owners');
+        setIsOwner(true);
+        setIsWalker(false);
     };
 
     return (
@@ -79,6 +102,15 @@ const Profile = () => {
                     <div className="name-edit">
                         <label className="edit-label">Last Name:</label>
                         <input type="text" value={userData?.Lastname ||  ''} onChange={(e) => setUserData({...userData, Lastname: e.target.value})} className="edit-input" />
+                    </div>
+                    <div className='postcode-edit'>
+                        <label className='edit-label'>Postcode:</label>
+                        <input type="text" className='edit-input' value={postcode} onChange={(e) => setPostcode(e.target.value)}/>
+                    </div>
+                    <div className='type-buttons'>
+                        <label>Account type</label>
+                        <button className={`type-button walk ${isWalker ? 'depressed' : ''}`} onClick={WalkerButtonClick}>Walker</button>
+                    <button className={`type-button own ${isOwner ? 'depressed' : ''}`} onClick={OwnerButtonClick}>Owner</button>
                     </div>
                         <div >
                             <label className="about-label">About Me:</label>
