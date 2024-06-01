@@ -85,8 +85,7 @@
 .type-button {
     flex: 1;
     padding: 10px 20px;
-    margin-left: 10px;
-    margin-right: 10px;
+    margin: 10px;
     border-radius: 8px;
     border: none;
     cursor: pointer;
@@ -104,5 +103,16 @@
 }
 
 .type-button.depressed {
-    opacity: 0.6; /* Reduce opacity to indicate the depressed state */
+    opacity: 0.6; 
 }
+
+input[type='file'] {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100px;
+    height: 100px;
+    opacity: 0;
+    cursor: pointer;
+}
+

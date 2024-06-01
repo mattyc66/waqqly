@@ -34,9 +34,26 @@ const Sign = () => {
 
     });
 
+    const validatePostcode = async (postcode) => {
+        try {
+            const response = await fetch(`https://api.postcodes.io/postcodes/${postcode}/validate`);
+            const data = await response.json();
+            return data.result; // Returns true if valid, false otherwise
+        } catch (error) {
+            console.error('Error validating postcode:', error);
+            return false;
+        }
+    };
 
-    const register = (event) => {
+
+    const register = async (event) => {
         event.preventDefault();
+        const isPostcodeValid = await validatePostcode(postcode);
+        if (!isPostcodeValid) {
+            setErrorMessage('Invalid postcode', postcode);
+            return;
+        }
+    
         createUserWithEmailAndPassword(auth, email, password)
         .then((userCredential) => {
             const user = userCredential.user;

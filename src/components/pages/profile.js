@@ -9,9 +9,11 @@ const Profile = () => {
     const [userData, setUserData] = useState(null);
     const [profileImage, setProfileImage] = useState(null);
     const [userType, setUserType] = useState(null);
-    const [postcode, setPostcode] = useState(''); // State for postcode
-    const [isWalker, setIsWalker] = useState(false); // State for walker button
-    const [isOwner, setIsOwner] = useState(false); // State for owner button 
+    const [postcode, setPostcode] = useState(''); 
+    const [isWalker, setIsWalker] = useState(false); 
+    const [isOwner, setIsOwner] = useState(false);  
+    const [imageUpload, setImageUpload] = useState(null);
+    const [imageURL, setImageURL] = useState(null);
 
     useEffect(() => {
         const uid = localStorage.getItem('userUID');
@@ -87,6 +89,13 @@ const Profile = () => {
         setIsWalker(false);
     };
 
+    const imageUploadEvent = (event => {
+        setImageUpload(event.target.files[0]);
+        const imageURL = URL.createObjectURL(event.target.files[0]);
+        setImageURL(imageURL)
+
+    });
+
     return (
         <div className='profile-container'>
             <div className="profile-info-container">
@@ -94,7 +103,10 @@ const Profile = () => {
                     <h1 className=""><strong>My profile</strong></h1>
                 </div>
                 <div className="personal-info">
+                    <div>
+                    <input type='file' onChange={imageUploadEvent}/>
                     <img className='profile-img' src={profileImage || profileLogo} alt="Profile" />
+                    </div>
                     <div className="name-edit">
                         <label className="edit-label">First Name:</label>
                         <input type="text" value={userData?.Firstname ||  ''} onChange={(e) => setUserData({...userData, Lastname: e.target.value})} className="edit-input" />
@@ -108,7 +120,7 @@ const Profile = () => {
                         <input type="text" className='edit-input' value={postcode} onChange={(e) => setPostcode(e.target.value)}/>
                     </div>
                     <div className='type-buttons'>
-                        <label>Account type</label>
+                        <label className='edit-label type'>Account type</label>
                         <button className={`type-button walk ${isWalker ? 'depressed' : ''}`} onClick={WalkerButtonClick}>Walker</button>
                     <button className={`type-button own ${isOwner ? 'depressed' : ''}`} onClick={OwnerButtonClick}>Owner</button>
                     </div>
