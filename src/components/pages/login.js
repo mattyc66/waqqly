@@ -22,6 +22,7 @@ const login = (event) => {
         localStorage.setItem('userUID', uid);
         console.log(userCredential);
         navigate('/main');
+        window.location.reload();
     })
     .catch((error) => {
         console.error("auth error", error)

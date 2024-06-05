@@ -99,7 +99,7 @@ const Main = () => {
                 ))}
             </div>
             <div className="right-column">
-                <MapContainer center={[51.509865, -0.118092]} zoom={13}>
+                <MapContainer center={[51.2625, -1.0871]} zoom={10}>
                     <TileLayer
                         url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
                         attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
