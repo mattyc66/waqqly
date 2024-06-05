@@ -1,9 +1,15 @@
 export const fetchCoordinates = async (postcode, apiKey) => {
-    const response = await fetch(`https://maps.googleapis.com/maps/api/geocode/json?address=${postcode}&key=${apiKey}`);
-    const data = await response.json();
-    if (data.results && data.results[0]) {
-      const { lat, lng } = data.results[0].geometry.location;
-      return { lat, lng };
-    }
-    throw new Error('No coordinates found for the given postcode');
-  };
+  const response = await fetch('https://geocode-microservice-ckrgg2nlsa-nw.a.run.app/fetch-coordinates', {
+      method: 'POST',
+      headers: {
+          'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({ postcode, apiKey })
+  });
+
+  const data = await response.json();
+  if (data.lat && data.lng) {
+      return { lat: data.lat, lng: data.lng };
+  }
+  throw new Error('No coordinates found for the given postcode');
+};

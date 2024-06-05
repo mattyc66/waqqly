@@ -13,9 +13,10 @@ import L from 'leaflet';
 const Main = () => {
     const [walkers, setWalkers] = useState([]);
     const [walkerLocations, setWalkerLocations] = useState([]);
+    const [expandedWalkerId, setExpandedWalkerId] = useState(null);
     const googleMapsApiKey = 'AIzaSyCOocKwlCnFBdZL7pbcek5tdu3vBIiuYgA';
 
-    useEffect(() => { 
+    useEffect(() => {
         const walkersRef = ref(database, 'users/Walkers');
 
         const fetchData = (snapshot) => {
@@ -38,6 +39,27 @@ const Main = () => {
         };
     }, []);
 
+    const fetchCoordinates = async (postcode, apiKey) => {
+        const response = await fetch('https://geocode-microservice-ckrgg2nlsa-nw.a.run.app/fetch-coordinates', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ postcode, apiKey })
+        });
+
+        if (!response.ok) {
+            const error = await response.text();
+            throw new Error(`Error fetching coordinates: ${error}`);
+        }
+
+        const data = await response.json();
+        if (data.lat && data.lng) {
+            return { lat: data.lat, lng: data.lng };
+        }
+        throw new Error('No coordinates found for the given postcode');
+    };
+
     useEffect(() => {
         const locations = walkers.map(walker => walker.coordinates).filter(Boolean);
         setWalkerLocations(locations);
@@ -51,20 +73,28 @@ const Main = () => {
         shadowSize: [41, 41],
     });
 
+    const toggleExpand = (uid) => {
+        setExpandedWalkerId(expandedWalkerId === uid ? null : uid);
+    };
 
     return (
         <div className='main-container'>
             <div className="left-column">
-                {walkers.map((walker) => (      
-                    <div key={walker.uid} className="walker-details">
+                {walkers.map((walker) => (
+                    <div
+                        key={walker.uid}
+                        className={`walker-details ${expandedWalkerId === walker.uid ? 'expanded' : ''}`}
+                        onClick={() => toggleExpand(walker.uid)}
+                    >
                         <div className='walker-profile'>
-                        <img src={walker.imageUrl || profilePlaceholder} className='walker-profile-image'/>
+                            <img src={walker.imageUrl || profilePlaceholder} className='walker-profile-image' />
                             <div className='detail-list'>
                                 <p className='Name'>{walker.Firstname} {walker.Lastname}</p>
                                 <p className='postcode'>Postcode: {walker.Postcode}</p>
+                                {expandedWalkerId === walker.uid && <p className='email'>Email: {walker.Email}</p>}
                             </div>
                         </div>
-                        <p className="about-walker">{walker.About}</p>
+                        {expandedWalkerId === walker.uid && <p className="about-walker">{walker.About}</p>}
                     </div>
                 ))}
             </div>
@@ -74,7 +104,7 @@ const Main = () => {
                         url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
                         attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
                     />
-                        {walkerLocations.map((location, index) => (
+                    {walkerLocations.map((location, index) => (
                         <Marker key={index} position={[location.lat, location.lng]} icon={defaultIcon}>
                             <Popup>{walkers[index].Firstname} {walkers[index].Lastname}</Popup>
                         </Marker>
@@ -85,5 +115,4 @@ const Main = () => {
     );
 };
 
-  
-  export default Main;
+export default Main;

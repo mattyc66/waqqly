@@ -9,9 +9,11 @@ const Login = () => {
 const navigate = useNavigate()
 const [email, setEmail] = useState('');
 const [password, setPassword] = useState('');
+const [loading, setLoading] = useState(false);
 
 const login = (event) => {
     event.preventDefault();
+    setLoading(true); 
     signInWithEmailAndPassword(auth, email, password)
     .then((userCredential) => {
         const user = userCredential.user;
@@ -24,6 +26,7 @@ const login = (event) => {
     .catch((error) => {
         console.error("auth error", error)
         alert("please check your email and password")
+        setLoading(false);
     })
 }
 
@@ -42,7 +45,9 @@ const login = (event) => {
                 <div className="input">
                     <input required type="password" placeholder='Enter password' value={password} onChange={(event) => setPassword(event.target.value)} className="input-entry" />
                 </div>
-                <button required className="login-button" name='login' type='login'>Login</button>
+                <button className="login-button" name='login' type='submit' disabled={loading}>
+                        {loading ? 'Logging in...' : 'Login'}
+                </button>
             </form>
         </div>
       </div>

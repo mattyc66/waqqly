@@ -31,7 +31,6 @@ const Sign = () => {
         setImageUpload(event.target.files[0]);
         const imageURL = URL.createObjectURL(event.target.files[0]);
         setImageURL(imageURL)
-
     });
 
     const validatePostcode = async (postcode) => {
@@ -62,6 +61,7 @@ const Sign = () => {
                 Firstname: firstName,
                 Lastname: lastName,
                 Postcode: postcode,
+                Email: email,
                 About: "This user has not provided any information."
             });
             if (imageUpload) {
